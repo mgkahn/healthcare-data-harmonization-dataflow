@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# mgk
+# JNI_DIR changed to match MacOS path for OpenJDK11
+#
+
 set -u -e
 
 WORK_DIR=""
@@ -39,8 +43,8 @@ rm -rf "${WORK_DIR}"
 mkdir -p "${WORK_DIR}"
 
 # At this point, we require OpenJDK 11.
-readonly JNI_DIR="/usr/lib/jvm/java-11-openjdk-amd64/include"
-readonly JNI_DIR_LINUX="/usr/lib/jvm/java-11-openjdk-amd64/include/linux"
+readonly JNI_DIR="/opt/homebrew/opt/openjdk@11/include"
+readonly JNI_DIR_LINUX="/opt/homebrew/opt/openjdk@11/include/linux"
 
 # Data harmonization repo.
 readonly DH_REPO="${DH_REPO:-https://github.com/GoogleCloudPlatform/healthcare-data-harmonization.git}"
@@ -59,6 +63,10 @@ git clone "${DH_REPO}" "${WORK_DIR}"
 
 cp -r "${REPO_DIR}/deps/clib" "${WORK_DIR}/mapping_engine/clib"
 cp -r "${REPO_DIR}/deps/wrapping" "${WORK_DIR}/mapping_engine/_wrapping"
+
+echo "Work dir: ${WORK_DIR}"
+echo "Output dir: ${OUTPUT_DIR}"
+echo "REPO dir: ${REPO_DIR}"
 
 echo "Building mapping engine..."
 
