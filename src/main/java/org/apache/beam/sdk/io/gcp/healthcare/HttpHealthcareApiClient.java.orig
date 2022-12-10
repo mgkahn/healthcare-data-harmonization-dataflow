@@ -1,6 +1,3 @@
-// Health Data Compass
-// 2022-12-10: While/try-catch loop added to executeFhirBundle() to allow for transient network connectivity issues 
-
 // Copyright 2020 Google LLC.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -580,47 +577,17 @@ public class HttpHealthcareApiClient implements HealthcareApiClient, Serializabl
             .addHeader("Accept", FHIRSTORE_HEADER_ACCEPT)
             .build();
 
-    int statusCode = 0;
-    int count = 0;
-    int countMax = 6;
-    int sleepValMs = 1000;
-    do{
-        HttpResponse response = httpClient.execute(request);
-        HttpEntity responseEntity = response.getEntity();
-        String content = EntityUtils.toString(responseEntity);
-        // Check 2XX code.
-        statusCode = response.getStatusLine().getStatusCode();
-        if ((statusCode / 100 == 2)) {
-            HttpBody responseModel = new HttpBody();
-            responseModel.setData(content);
-            return responseModel;
-        }
-        if (!(statusCode / 100 == 2) && count > countMax) {
-            throw HealthcareHttpException.of(statusCode, content);
-        }
-        LOG.warn(
-            String.format(
-                "Bad response in executeFhirBundle: %s in loop try #%s", statusCode, count));
-        count++;
-        try {
-            Thread.sleep(sleepValMs);
-        } 
-        catch(InterruptedException e) {
-            // this part is executed when an exception (in this example InterruptedException) occurs
-            System.out.println(e);
-        }
-        sleepValMs*=2;
-    }while(!(statusCode / 100 == 2));
-
-    return new HttpBody();
-    // HttpResponse response = httpClient.execute(request);
-    // HttpEntity responseEntity = response.getEntity();
-    // String content = EntityUtils.toString(responseEntity);
-    // // Check 2XX code.
-    // statusCode = response.getStatusLine().getStatusCode();
-    // if (!(statusCode / 100 == 2)) {
-    //   throw HealthcareHttpException.of(statusCode, content);
-    // }
+    HttpResponse response = httpClient.execute(request);
+    HttpEntity responseEntity = response.getEntity();
+    String content = EntityUtils.toString(responseEntity);
+    // Check 2XX code.
+    int statusCode = response.getStatusLine().getStatusCode();
+    if (!(statusCode / 100 == 2)) {
+      throw HealthcareHttpException.of(statusCode, content);
+    }
+    HttpBody responseModel = new HttpBody();
+    responseModel.setData(content);
+    return responseModel;
   }
 
   /**

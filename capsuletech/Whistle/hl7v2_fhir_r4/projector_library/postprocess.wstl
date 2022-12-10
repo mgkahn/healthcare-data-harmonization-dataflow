@@ -1,0 +1,34 @@
+def Output_Resource(item) {
+  out Resources : item;
+  $this : item;
+}
+
+def Build_Reference(Resource) {
+  if (Resource.resourceType?){
+    reference : $StrCat(Resource.resourceType, "/", Resource.id);
+  }
+}
+
+def Build_BundleEntry(Resource,Verb) {
+  resource : Resource;
+  if (~Resource.id?){
+    resource.id : $Hash(Resource);
+  }
+  request.method : Verb;
+  request.url : $StrCat(Resource.resourceType, "/", dest resource.id);
+}
+
+def Output_Transaction(Output) {
+  var Resources: $Unique(Output.Resources);
+  timestamp : Output.Bundle.timestamp;
+  identifier : Output.Bundle.identifier;
+  resourceType : "Bundle";
+  type : "transaction";
+  entry[] : Build_BundleEntry(Resources[], "PUT");
+  entry[] : Build_BundleEntry(Build_Provenance(Resources, Output.Provenance), "PUT");
+}
+
+def Build_Provenance(required Resources, Provenance) {
+  $this : Provenance;
+  target[] : Build_Reference(Resources[]);
+}

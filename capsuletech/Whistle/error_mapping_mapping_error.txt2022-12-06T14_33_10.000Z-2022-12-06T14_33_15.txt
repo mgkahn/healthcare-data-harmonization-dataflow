@@ -1,0 +1,120 @@
+GenericData{classInfo=[f], {stacktrace=java.lang.RuntimeException: unable to transform: parsing time "2007-12-06T07:33:11.89Z" as "2006-01-02T15:04:05.000Z07:00": cannot parse "" as ".000"
+Native Function "$ReformatTime"
+
+	Evaluating arguments for $ReformatTime
+	2nd field_mapping [FieldMapping]
+Convert_DateTime [ProjectorDefinition]
+
+	Evaluating arguments for Convert_DateTime
+	8th field_mapping [FieldMapping]
+OBX_Observation [ProjectorDefinition]
+
+	Iterated arguments "ORU_R01.PATIENT_RESULT[0].ORDER_OBSERVATION[0].OBSERVATION[0].OBX, Parse_PATIENT_RESULT's var Patient"
+	Evaluating arguments for OBX_Observation
+	1st field_mapping [FieldMapping]
+PARSE_ORDER_OBSERVATION [ProjectorDefinition]
+
+	Iterated arguments "ORU_R01.PATIENT_RESULT[0].ORDER_OBSERVATION.[0], Parse_PATIENT_RESULT's var Patient"
+	Evaluating arguments for PARSE_ORDER_OBSERVATION
+	9th field_mapping [FieldMapping]
+Parse_PATIENT_RESULT [ProjectorDefinition]
+
+	Iterated arguments "ORU_R01.PATIENT_RESULT.[0]"
+	Evaluating arguments for Parse_PATIENT_RESULT
+	6th field_mapping [FieldMapping]
+ORU_R01 [ProjectorDefinition]
+
+	Evaluating arguments for ORU_R01
+	6th field_mapping [FieldMapping]
+HL7v2_FHIR [ProjectorDefinition]
+
+	Evaluating arguments for HL7v2_FHIR
+	1st field_mapping [FieldMapping]
+	at com.google.cloud.healthcare.etl.util.library.TransformWrapper.transform(Native Method)
+	at com.google.cloud.healthcare.etl.pipeline.MappingFn.lambda$process$0(MappingFn.java:141)
+	at com.google.cloud.healthcare.etl.pipeline.MappingFn.runAndReportMetrics(MappingFn.java:129)
+	at com.google.cloud.healthcare.etl.pipeline.MappingFn.process(MappingFn.java:138)
+	at com.google.cloud.healthcare.etl.pipeline.ErrorEnabledDoFn.output(ErrorEnabledDoFn.java:34)
+	at com.google.cloud.healthcare.etl.pipeline.MappingFn$DoFnInvoker.invokeProcessElement(Unknown Source)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner.invokeProcessElement(SimpleDoFnRunner.java:232)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner.processElement(SimpleDoFnRunner.java:191)
+	at org.apache.beam.runners.dataflow.worker.SimpleParDoFn.processElement(SimpleParDoFn.java:340)
+	at org.apache.beam.runners.dataflow.worker.util.common.worker.ParDoOperation.process(ParDoOperation.java:44)
+	at org.apache.beam.runners.dataflow.worker.util.common.worker.OutputReceiver.process(OutputReceiver.java:49)
+	at org.apache.beam.runners.dataflow.worker.SimpleParDoFn$1.output(SimpleParDoFn.java:285)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner.outputWindowedValue(SimpleDoFnRunner.java:272)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner.access$900(SimpleDoFnRunner.java:84)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner$DoFnProcessContext.output(SimpleDoFnRunner.java:420)
+	at org.apache.beam.sdk.transforms.DoFnOutputReceivers$WindowedContextOutputReceiver.output(DoFnOutputReceivers.java:76)
+	at org.apache.beam.sdk.transforms.MapElements$1.processElement(MapElements.java:142)
+	at org.apache.beam.sdk.transforms.MapElements$1$DoFnInvoker.invokeProcessElement(Unknown Source)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner.invokeProcessElement(SimpleDoFnRunner.java:232)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner.processElement(SimpleDoFnRunner.java:191)
+	at org.apache.beam.runners.dataflow.worker.SimpleParDoFn.processElement(SimpleParDoFn.java:340)
+	at org.apache.beam.runners.dataflow.worker.util.common.worker.ParDoOperation.process(ParDoOperation.java:44)
+	at org.apache.beam.runners.dataflow.worker.util.common.worker.OutputReceiver.process(OutputReceiver.java:49)
+	at org.apache.beam.runners.dataflow.worker.SimpleParDoFn$1.output(SimpleParDoFn.java:285)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner.outputWindowedValue(SimpleDoFnRunner.java:272)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner.access$900(SimpleDoFnRunner.java:84)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner$DoFnProcessContext.output(SimpleDoFnRunner.java:420)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner$DoFnProcessContext.output(SimpleDoFnRunner.java:408)
+	at org.apache.beam.sdk.io.gcp.healthcare.HL7v2IO$Read$FetchHL7v2Message$HL7v2MessageGetFn.processElement(HL7v2IO.java:455)
+	at org.apache.beam.sdk.io.gcp.healthcare.HL7v2IO$Read$FetchHL7v2Message$HL7v2MessageGetFn$DoFnInvoker.invokeProcessElement(Unknown Source)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner.invokeProcessElement(SimpleDoFnRunner.java:232)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner.processElement(SimpleDoFnRunner.java:191)
+	at org.apache.beam.runners.dataflow.worker.SimpleParDoFn.processElement(SimpleParDoFn.java:340)
+	at org.apache.beam.runners.dataflow.worker.util.common.worker.ParDoOperation.process(ParDoOperation.java:44)
+	at org.apache.beam.runners.dataflow.worker.util.common.worker.OutputReceiver.process(OutputReceiver.java:49)
+	at org.apache.beam.runners.dataflow.worker.SimpleParDoFn$1.output(SimpleParDoFn.java:285)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner.outputWindowedValue(SimpleDoFnRunner.java:272)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner.access$900(SimpleDoFnRunner.java:84)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner$DoFnProcessContext.output(SimpleDoFnRunner.java:420)
+	at org.apache.beam.sdk.transforms.DoFnOutputReceivers$WindowedContextOutputReceiver.output(DoFnOutputReceivers.java:76)
+	at org.apache.beam.sdk.transforms.MapElements$1.processElement(MapElements.java:142)
+	at org.apache.beam.sdk.transforms.MapElements$1$DoFnInvoker.invokeProcessElement(Unknown Source)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner.invokeProcessElement(SimpleDoFnRunner.java:232)
+	at org.apache.beam.runners.dataflow.worker.repackaged.org.apache.beam.runners.core.SimpleDoFnRunner.processElement(SimpleDoFnRunner.java:191)
+	at org.apache.beam.runners.dataflow.worker.SimpleParDoFn.processElement(SimpleParDoFn.java:340)
+	at org.apache.beam.runners.dataflow.worker.util.common.worker.ParDoOperation.process(ParDoOperation.java:44)
+	at org.apache.beam.runners.dataflow.worker.util.common.worker.OutputReceiver.process(OutputReceiver.java:49)
+	at org.apache.beam.runners.dataflow.worker.util.common.worker.ReadOperation.runReadLoop(ReadOperation.java:212)
+	at org.apache.beam.runners.dataflow.worker.util.common.worker.ReadOperation.start(ReadOperation.java:163)
+	at org.apache.beam.runners.dataflow.worker.util.common.worker.MapTaskExecutor.execute(MapTaskExecutor.java:92)
+	at org.apache.beam.runners.dataflow.worker.StreamingDataflowWorker.process(StreamingDataflowWorker.java:1437)
+	at org.apache.beam.runners.dataflow.worker.StreamingDataflowWorker.access$1100(StreamingDataflowWorker.java:165)
+	at org.apache.beam.runners.dataflow.worker.StreamingDataflowWorker$7.run(StreamingDataflowWorker.java:1113)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+, error_message=unable to transform: parsing time "2007-12-06T07:33:11.89Z" as "2006-01-02T15:04:05.000Z07:00": cannot parse "" as ".000"
+Native Function "$ReformatTime"
+
+	Evaluating arguments for $ReformatTime
+	2nd field_mapping [FieldMapping]
+Convert_DateTime [ProjectorDefinition]
+
+	Evaluating arguments for Convert_DateTime
+	8th field_mapping [FieldMapping]
+OBX_Observation [ProjectorDefinition]
+
+	Iterated arguments "ORU_R01.PATIENT_RESULT[0].ORDER_OBSERVATION[0].OBSERVATION[0].OBX, Parse_PATIENT_RESULT's var Patient"
+	Evaluating arguments for OBX_Observation
+	1st field_mapping [FieldMapping]
+PARSE_ORDER_OBSERVATION [ProjectorDefinition]
+
+	Iterated arguments "ORU_R01.PATIENT_RESULT[0].ORDER_OBSERVATION.[0], Parse_PATIENT_RESULT's var Patient"
+	Evaluating arguments for PARSE_ORDER_OBSERVATION
+	9th field_mapping [FieldMapping]
+Parse_PATIENT_RESULT [ProjectorDefinition]
+
+	Iterated arguments "ORU_R01.PATIENT_RESULT.[0]"
+	Evaluating arguments for Parse_PATIENT_RESULT
+	6th field_mapping [FieldMapping]
+ORU_R01 [ProjectorDefinition]
+
+	Evaluating arguments for ORU_R01
+	6th field_mapping [FieldMapping]
+HL7v2_FHIR [ProjectorDefinition]
+
+	Evaluating arguments for HL7v2_FHIR
+	1st field_mapping [FieldMapping], timestamp=2022-12-06T14:33:23.554247Z[Etc/UTC], step=MappingFn, sources=[projects/hdcwaveformp/locations/us-central1/datasets/datastore/hl7V2Stores/hl7v2store_non_delimeted_obx5/messages/nSouj8oL3rU3wfY7OA2MwtqzJzPrbdlk95QYVMwL-1Y=]}}
