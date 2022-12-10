@@ -1,3 +1,32 @@
+# CapsuleTech-specific changes to Master branch
+
+This branch holds changes or additions to main branch required for CU-AMC CapsuleTech HL7-FHIR-BigQuery ingestion project. Key changes:
+* Java:
+  * Created While(try-catch) loop to HttpHealthcareApiClient.java to retry FHIR call due failure from transient internet issues. 
+    * Creates modified converter.jar file in gradle build (converter-hdc.jar)
+  * build_deps.sh: Changed hard coded path for JNI_DIR, JNI_DIR_LINUX to reflect correct paths for build platform
+* Docker image:
+  * Base Docker image pulled from us-docker.pkg.dev/qwiklabs-resources/healthcare-qwiklabs-resources/dataflow-pipeline:v0.02
+  * Two alternative entrypoint programs added to base image:
+    * Modified converter-hdc.jar (see above).
+    * entrypoint2.sh: Infinate loop called by make run-i (see below) for interactive shell access to running container
+    * Dockerfile inserts alternative entrypoint programs into base Docker image. Original converter.jar left in place
+* Makefile - targets include get-google (pull base Docker), build/build-from-scratch (see above), run-d/run-i (run detached, run interactive)
+* Whistle (from healthcare-data-harmonization project)
+  * datatypes.wstl: Added hdc-specific time zone patterns to match CapsuleTech datetime format
+  
+# TO DO:
+Create production docker file from stock image and generic components. 
+* Production docker file uses us-docker.pkg.dev/qwiklabs-resources/healthcare-qwiklabs-resources/dataflow-pipeline:v0.02 as base image. If this image is removed by Google, we cannot build a new image
+  * Use Docker history or dive (https://gochronicles.com/dive/) (https://github.com/wagoodman/dive) to pull out layers
+  * build_base/quicklabs_dataflow_script.sh is script pulled from Docker history in quiklabs image
+  * last COPY is probably the converter.jar file being added to the image
+  * What is the first COPY?
+    * Probably the base linux image used by Google. Probably the base GCE image provided by Google GCS
+    
+---
+---
+
 # HL7v2 to FHIR Pipeline
 
 This directory contains a reference Cloud Dataflow pipeline to convert HL7v2 messages to FHIR resources. Please note that additional configurations and hardening are required before processing PHI data with this pipeline.
