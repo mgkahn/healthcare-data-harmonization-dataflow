@@ -1,0 +1,131 @@
+To create a 10 instance JSON input file from GCS bucket
+
+1. Download NDJSON file from GCS: 
+   hdcwaveformp.temp.12082022_hl7v2store/ (original format)
+   hdcwaveformp,temp.12082022_hl7v2store_non-delimited.obx/ /(post Cloud function)
+2. Create 10 instance NDJSON: sed -e '11,$d' input > output.ndjson
+3. Create JSON version of NDJSON
+   npx ndjson-to-json output.ndjson -o output.json
+   Tool from https://github.com/madnight/ndjson-to-json
+   Install: npm install -g ndjson-to-json
+4. VS Code extension: jq-vscode by petli-full
+5. jq script that works: .[0].schematizedData.data|fromjson.ORU_R01.PATIENT_RESULT[0].ORDER_OBSERVATION[0]
+
+
+NOTE: fromjson -- jq function that converts string into JSON
+
+
+NOTES:
+1. effectiveDateTime: comes from the HL7 message (This is the same value in duplicate messages)
+2. lastUpdatedTime: assigned by the pipeline when a row is inserted (This is a different vallue in duplicate messages)
+
+Duplicate messages have same effectiveDateTime and all other fields but different lastUpdatedTime
+
+
+
+
+
+BigQuery (from Bujia):
+with OBX AS (
+  SELECT id,  meta.lastUpdated,a.code, subject.patientid,effective.datetime,value.sampledData.data 
+FROM `hdcwaveformp.fhirdata.Observation` 
+,unnest(code.coding) a
+where effective.datetime like '2022-12-08T15:2%'
+--and a.code in ('4560','52911','52912','52913')
+order by 5,3
+),
+SPE AS (
+  SELECT subject.patientid, collection.collector.practitionerid FROM `hdcwaveformp.fhirdata.Specimen` 
+),
+PRA AS (
+  select * from (SELECT id as practitionerid, i.value FROM `hdcwaveformp.fhirdata.Practitioner`
+  ,unnest(identifier) i
+  where i.value = 'AMC-BIOMEDSPARE' ) 
+  --limit 1000
+),
+WAVEFORM as (
+SELECT OBX.code, OBX.data as value, OBX.datetime as observation_datetime,
+FROM OBX 
+INNER JOIN SPE ON OBX.patientid = SPE.patientid
+INNER JOIN PRA ON SPE.practitionerid = PRA.practitionerid
+),
+unique_waveform as (
+  select distinct * from WAVEFORM 
+order by 3,1 desc),
+counts_sec as (
+select substr(unique_waveform.observation_datetime, 1,19) as ob_dt, count(1)/4 as count_sec
+from unique_waveform
+group by 1
+order by 2
+)
+
+-- select substr(unique_wavefrom.observation_datetime, 1,13) as hour, cast(count(1)/4 as INT64) as message_count
+-- from unique_wavefrom
+-- group by 1
+-- order by 1
+
+--select * from unique_waveform
+
+select sum(count_sec) from counts_sec 
+
+
+
+BigQuery (Michael's modifications):
+-- OBX CTE -- added n_values to count number of values in data field
+-- Create histogram of n_values by n_rows to get distribution of values across a data set (1 hour)
+-- Removes two INNER JOINS (doesn't change counts)
+-- Removes group_by in unque_waveform (CTE not used
+
+with OBX AS (
+  SELECT id,  meta.lastUpdated,a.code, subject.patientid, effective.datetime, value.sampledData.data
+   , cast(effective.datetime as timestamp)
+   ,(select count(data)
+    from unnest(split(value.sampledData.data," "))data) as n_values
+FROM `hdcwaveformp.fhirdata.Observation` 
+,unnest(code.coding) a
+where effective.datetime like '2022-12-08T15:%'
+--and a.code in ('4560','52911','52912','52913')
+order by 5,3
+),
+SPE AS (
+  SELECT subject.patientid, collection.collector.practitionerid FROM `hdcwaveformp.fhirdata.Specimen` 
+),
+PRA AS (
+  select * from (SELECT id as practitionerid, i.value FROM `hdcwaveformp.fhirdata.Practitioner`
+  ,unnest(identifier) i
+  where i.value = 'AMC-BIOMEDSPARE' ) 
+  --limit 1000
+),
+WAVEFORM as (
+SELECT OBX.code, OBX.data as value, OBX.datetime as observation_datetime,
+FROM OBX 
+--INNER JOIN SPE ON OBX.patientid = SPE.patientid
+--INNER JOIN PRA ON SPE.practitionerid = PRA.practitionerid
+),
+unique_waveform as (
+  select  * from WAVEFORM 
+order by 3,1 desc),
+counts_sec as (
+select substr(unique_waveform.observation_datetime, 1,19) as ob_dt, count(1)/4 as count_sec
+from unique_waveform
+group by 1
+order by 2
+)
+
+-- select substr(unique_wavefrom.observation_datetime, 1,13) as hour, cast(count(1)/4 as INT64) as message_count
+-- from unique_wavefrom
+-- group by 1
+-- order by 1
+
+-- Frequency of rows with each number of values: Max=35 values!, Model = 10 values
+select n_values, count(id) as freq
+from OBX
+group by n_values
+order by n_values desc
+
+--select* from OBX where n_values = 35 limit 5
+
+--select * from unique_waveform limit 100
+
+
+--select sum(count_sec) from counts_sec 
