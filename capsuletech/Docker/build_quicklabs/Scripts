@@ -1,6 +1,8 @@
-docker buildx build --tag mgkahn/capsuletech.kahn --platform linux/amd64 --file Dockerfile.Kahn --no-cache .
-docker buildx build --tag mgkahn/capsuletech.bullseye.buster --platform linux/amd64 --file Dockerfile.Google.Kahn.Bullseye.Buster .
-docker run -it mgkahn/capsuletech.kahn /bin/bash
+docker buildx build --tag mgkahn/capsuletech.arm64 --platform linux/arm64 --file Dockerfile.arm64 --no-cache .
+docker run -it mgkahn/capsuletech.arm64 /bin/bash
+
+docker buildx build --tag mgkahn/capsuletech.amd64 --platform linux/amd64 --file Dockerfile.amd64 --no-cache .
+docker run -it mgkahn/capsuletech.amd64 /bin/bash
 
 # No cache
 docker buildx build --tag mgkahn/capsuletech.kahn --platform linux/amd64 --file Dockerfile.Kahn --no-cache .

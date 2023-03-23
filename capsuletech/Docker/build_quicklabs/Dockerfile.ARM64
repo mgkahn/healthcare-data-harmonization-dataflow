@@ -2,20 +2,20 @@ FROM debian:bullseye-slim AS builder
 ENV GOPATH /root/work
 ENV GOCACHE /root/.cache/go-build
 ENV GRADLE_HOME /opt/gradle-6.9.4
-ENV JAVA_HOME "/usr/lib/jvm/java-8-openjdk-amd64"
+ENV JAVA_HOME "/usr/lib/jvm/java-8-openjdk-arm64"
 ENV PATH "${PATH}:/usr/local/go/bin:/opt/gradle-6.9.4/bin"
 RUN mkdir -p /usr/share/man/man1 \
 && apt update -y \
 && apt install -y curl zip build-essential openjdk-11-jdk protobuf-compiler git wget procps screen \
-&& curl -L -o /root/go1.15.11.linux-amd64.tar.gz https://dl.google.com/go/go1.15.11.linux-amd64.tar.gz \
+&& curl -L -o /root/go1.15.11.linux-arm64.tar.gz https://dl.google.com/go/go1.15.11.linux-arm64.tar.gz \
 && tar -xvf /root/go*.tar.gz -C /root \
 && mv /root/go /usr/local \
 && mkdir -p /root/work /root/.cache/go-build \
 && curl -L -o /tmp/gradle-6.9.4-bin.zip https://services.gradle.org/distributions/gradle-6.9.4-bin.zip \
 && unzip -d /opt /tmp/gradle-*.zip
 RUN mkdir -p /usr/lib/jvm \
-&& ln -snf /usr/lib/jvm/java-11-openjdk-amd64 /usr/lib/jvm/java-8-openjdk-amd64 \
-&& ln -snf /usr/lib/jvm/java-8-openjdk-amd64/bin/java /etc/alternatives/java
+&& ln -snf /usr/lib/jvm/java-11-openjdk-arm64 /usr/lib/jvm/java-8-openjdk-arm64 \
+&& ln -snf /usr/lib/jvm/java-8-openjdk-arm64/bin/java /etc/alternatives/java
 WORKDIR /root
 RUN git clone https://github.com/GoogleCloudPlatform/healthcare-data-harmonization.git \
 && git clone https://github.com/GoogleCloudPlatform/healthcare-data-harmonization-dataflow.git
