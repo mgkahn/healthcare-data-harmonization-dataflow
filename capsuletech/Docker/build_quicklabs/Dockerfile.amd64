@@ -25,7 +25,13 @@ WORKDIR /root/healthcare-data-harmonization-dataflow
 RUN gradle wrapper --gradle-version 6.9.4 \
 && ./gradlew shadowJar \
 && mv /root/healthcare-data-harmonization-dataflow/build/libs/converter-0.1.0-all.jar /root/converter-0.1.0-all.jar
-
+FROM openjdk:11-jdk-slim-buster
+ENV JAVA_HOME "/usr/lib/jvm/java-8-openjdk-amd64"
+RUN mkdir /usr/lib/jvm \
+&& ln -snf /usr/local/openjdk-11 /usr/lib/jvm/java-8-openjdk-amd64 \
+&& ln -snf /usr/lib/jvm/java-8-openjdk-amd64/bin/java /etc/alternatives/java
+WORKDIR /root/
+COPY --from=builder /root/converter-0.1.0-all.jar .
 
 
 
