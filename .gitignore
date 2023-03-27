@@ -12,3 +12,6 @@
 **/*.class
 **/.gradle
 .gradle
+**/.lock
+*.lock
+.lock
