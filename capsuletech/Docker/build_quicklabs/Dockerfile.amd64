@@ -23,7 +23,7 @@ WORKDIR /root/healthcare-data-harmonization
 RUN ./build_all.sh
 WORKDIR /root/healthcare-data-harmonization-dataflow
 RUN gradle wrapper --gradle-version 6.9.4 \
-&& ./gradlew shadowJar \
+&& ./gradlew clean shadowJar \
 && mv /root/healthcare-data-harmonization-dataflow/build/libs/converter-0.1.0-all.jar /root/converter-0.1.0-all.jar
 FROM openjdk:11-jdk-slim-buster
 ENV JAVA_HOME "/usr/lib/jvm/java-8-openjdk-amd64"
