@@ -1,5 +1,5 @@
 # Intel/amd64
-docker buildx build --tag mgkahn/capsuletech-amd64:latest --platform linux/amd64 --file Dockerfile.amd64 --no-cache .
+docker buildx build --tag mgkahn/capsuletech-amd64:latest --tag mgkahn/capsuletech-amd64:2.39.0 --platform linux/amd64 --file Dockerfile.amd64 --no-cache .
 docker run -it mgkahn/capsuletech-amd64:latest /bin/bash
 
 #Apple Silicon/arm64/aarch64
